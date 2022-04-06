@@ -1,3 +1,30 @@
+// 1. Create global userWalletAddress variable
+window.userWalletAddress = null;
+
+// 2. when the browser is ready
+window.onload = async (event) => {
+
+  // 2.1 check if ethereum extension is installed
+  if (window.ethereum) {
+
+    // 3. create web3 instance
+    window.web3 = new Web3(window.ethereum);
+
+  } else {
+
+    // 4. prompt user to install Metamask
+    alert("Please install MetaMask or any Ethereum Extension Wallet");
+  }
+
+  // 5. check if user is already logged in and update the global userWalletAddress variable
+  window.userWalletAddress = window.localStorage.getItem("userWalletAddress");
+
+  // 6. show the user dashboard
+  showUserDashboard();
+};
+
+
+
 // 1. Web3 login function
 const loginWithEth = async () => {
   // 1.1 check if there is global window.web3 instance
@@ -33,3 +60,39 @@ const loginWithEth = async () => {
 
 // 6. when the user clicks the login button run the loginWithEth function
 document.querySelector(".login-btn").addEventListener("click", loginWithEth);
+
+
+// function to show the user dashboard
+const showUserDashboard = async () => {
+
+  // if the user is not logged in - userWalletAddress is null
+  if (!window.userWalletAddress) {
+
+    // change the page title
+    document.title = "Web3 Login";
+
+    // show the login section
+    document.querySelector(".login-section").style.display = "flex";
+
+    // hide the user dashboard section
+    document.querySelector(".dashboard-section").style.display = "none";
+
+    // return from the function
+    return false;
+  }
+
+  // change the page title
+  document.title = "Web3 Dashboard 🤝";
+
+  // hide the login section
+  document.querySelector(".login-section").style.display = "none";
+
+  // show the dashboard section
+  document.querySelector(".dashboard-section").style.display = "flex";
+
+  // show the user's wallet address
+  // showUserWalletAddress();
+
+  // get the user's wallet balance
+  // getWalletBalance();
+};
